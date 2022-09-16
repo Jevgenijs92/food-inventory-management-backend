@@ -19,5 +19,6 @@ import { AppConfigurationService } from './app-configuration.service';
     }),
   ],
   providers: [AppConfigurationService],
+  exports: [AppConfigurationService],
 })
 export class AppConfigurationModule {}
