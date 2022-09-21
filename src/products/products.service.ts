@@ -8,7 +8,7 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { PRODUCT_MODEL } from '../common';
 import { Product } from './entities/product.entity';
-import { Model } from 'mongoose';
+import { LeanDocument, Model } from 'mongoose';
 
 @Injectable()
 export class ProductsService {
@@ -28,40 +28,16 @@ export class ProductsService {
   }
 
   async findOne(id: string): Promise<Product> {
-    try {
-      const product = await this.productModel
-        .findById(id)
-        .populate({
-          path: 'ingredients.ingredient',
-          select: 'id name price unit pricePerUnit',
-        })
-        .orFail()
-        .exec();
-      const result = product?.toObject();
-      const ingredients = result.ingredients?.map((entry) => ({
-        ingredient: entry.ingredient,
-        quantity: entry.quantity,
-        price: entry.ingredient.price * entry.quantity,
-      }));
-      return {
-        ...result,
-        ingredients,
-        price: ingredients.reduce((sum, a) => sum + a.price, 0),
-      };
-    } catch (exception) {
-      console.log(exception);
-      throw new NotFoundException('Could not find product');
-    }
+    const product = await this.findById(id);
+    return calculatePrice(product?.toObject());
   }
 
   async update(id: string, updateProductDto: UpdateProductDto) {
+    const updatedProduct = await this.findById(id);
     try {
-      const updatedProduct = await this.productModel
-        .findById(id)
-        .orFail()
-        .exec();
       Object.assign(updatedProduct, updateProductDto);
-      return await updatedProduct.save();
+      await updatedProduct.save();
+      return this.findOne(id);
     } catch (exception) {
       console.log(exception);
       throw new InternalServerErrorException('Could not update product');
@@ -70,10 +46,32 @@ export class ProductsService {
 
   async remove(id: string) {
     try {
-      await this.productModel.deleteOne({ _id: id }).orFail().exec();
+      return await this.productModel.deleteOne({ _id: id }).orFail().exec();
+    } catch (exception) {
+      console.log(exception);
+      throw new NotFoundException('Could not find product');
+    }
+  }
+
+  private async findById(id: string) {
+    try {
+      return await this.productModel.findById(id).orFail().exec();
     } catch (exception) {
       console.log(exception);
       throw new NotFoundException('Could not find product');
     }
   }
 }
+
+const calculatePrice = (product: LeanDocument<Product>): Product => {
+  const ingredients = product.ingredients?.map((entry) => ({
+    ingredient: entry.ingredient,
+    quantity: entry.quantity,
+    price: entry.ingredient.price * entry.quantity,
+  }));
+  return {
+    ...product,
+    ingredients,
+    price: ingredients.reduce((sum, a) => sum + a.price, 0),
+  };
+};

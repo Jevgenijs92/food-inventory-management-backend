@@ -10,6 +10,8 @@ export const databaseProviders = [
       databaseConfigService: DatabaseConfigurationService,
     ): Promise<typeof mongoose> =>
       mongoose
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
+        .plugin(require('mongoose-autopopulate'))
         .set('toJSON', toObjectOptions)
         .set('toObject', toObjectOptions)
         .connect(databaseConfigService.uri),

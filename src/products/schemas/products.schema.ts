@@ -11,15 +11,9 @@ export const ProductsSchema = new mongoose.Schema({
       ingredient: {
         type: Schema.Types.ObjectId,
         ref: 'Ingredient',
+        autopopulate: true,
       },
       quantity: Number,
-      price: Number,
     },
   ],
-
-  price: {
-    type: Number,
-    get: (v: number) => (v / 100).toFixed(2),
-    set: (v: number) => v * 100,
-  },
 });
