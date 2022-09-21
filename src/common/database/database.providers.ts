@@ -1,6 +1,7 @@
 import * as mongoose from 'mongoose';
 import { DATABASE_CONNECTION } from '../constants';
 import { DatabaseConfigurationService } from '../config';
+import { ToObjectOptions } from 'mongoose';
 
 export const databaseProviders = [
   {
@@ -9,14 +10,19 @@ export const databaseProviders = [
       databaseConfigService: DatabaseConfigurationService,
     ): Promise<typeof mongoose> =>
       mongoose
-        .set('toJSON', {
-          transform: (_, value) => {
-            value.id = value._id;
-            delete value._id;
-            delete value.__v;
-          },
-        })
+        .set('toJSON', toObjectOptions)
+        .set('toObject', toObjectOptions)
         .connect(databaseConfigService.uri),
     inject: [DatabaseConfigurationService],
   },
 ];
+
+const toObjectOptions: ToObjectOptions = {
+  getters: true,
+  virtuals: true,
+  versionKey: false,
+  transform: (_, value) => {
+    value.id = value._id;
+    delete value._id;
+  },
+};
