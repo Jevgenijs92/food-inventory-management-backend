@@ -15,21 +15,18 @@ export class ProductsService {
   constructor(@Inject(PRODUCT_MODEL) private productModel: Model<Product>) {}
 
   async create(createProductDto: CreateProductDto): Promise<Product | null> {
-    return new this.productModel(createProductDto).save();
+    const product = await new this.productModel(createProductDto).save();
+    return convertProduct(product.toObject());
   }
 
   async findAll(): Promise<Product[]> {
-    return this.productModel
-      .find()
-      .populate({
-        path: 'ingredients.ingredient',
-      })
-      .exec();
+    const products = await this.productModel.find().exec();
+    return products.map((product) => convertProduct(product.toObject()));
   }
 
   async findOne(id: string): Promise<Product> {
     const product = await this.findById(id);
-    return calculatePrice(product?.toObject());
+    return convertProduct(product?.toObject());
   }
 
   async update(id: string, updateProductDto: UpdateProductDto) {
@@ -46,7 +43,7 @@ export class ProductsService {
 
   async remove(id: string) {
     try {
-      return await this.productModel.deleteOne({ _id: id }).orFail().exec();
+      await this.productModel.deleteOne({ _id: id }).orFail().exec();
     } catch (exception) {
       console.log(exception);
       throw new NotFoundException('Could not find product');
@@ -63,11 +60,12 @@ export class ProductsService {
   }
 }
 
-const calculatePrice = (product: LeanDocument<Product>): Product => {
+const convertProduct = (product: LeanDocument<Product>): Product => {
   const ingredients = product.ingredients?.map((entry) => ({
     ingredient: entry.ingredient,
     quantity: entry.quantity,
-    price: entry.ingredient.price * entry.quantity,
+    price:
+      Math.round(entry.ingredient.pricePerUnit * entry.quantity * 100) / 100,
   }));
   return {
     ...product,

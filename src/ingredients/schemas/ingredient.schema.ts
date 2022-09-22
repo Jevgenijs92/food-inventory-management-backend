@@ -5,15 +5,18 @@ export const IngredientSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  price: {
+  pricePerPackaging: {
     type: Number,
+    required: true,
     get: (v: number) => v / 100,
     set: (v: number) => v * 100,
   },
-  unit: String,
-  pricePerUnit: {
+  quantityPerPackaging: {
     type: Number,
-    get: (v: number) => v / 100,
-    set: (v: number) => v * 100,
+    required: true,
+  },
+  unitOfMeasurement: {
+    type: String,
+    required: true,
   },
 });

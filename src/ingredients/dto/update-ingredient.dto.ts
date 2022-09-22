@@ -1,15 +1,4 @@
-import { IsOptional } from 'class-validator';
+import { PartialType } from '@nestjs/swagger';
+import { CreateIngredientDto } from './create-ingredient.dto';
 
-export class UpdateIngredientDto {
-  @IsOptional()
-  readonly name: string;
-
-  @IsOptional()
-  readonly price: number;
-
-  @IsOptional()
-  readonly unit: string;
-
-  @IsOptional()
-  readonly pricePerUnit: number;
-}
+export class UpdateIngredientDto extends PartialType(CreateIngredientDto) {}

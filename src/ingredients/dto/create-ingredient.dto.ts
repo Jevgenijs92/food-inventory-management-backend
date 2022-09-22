@@ -1,15 +1,22 @@
-import { IsNotEmpty, IsOptional } from 'class-validator';
+import { IsNotEmpty, IsNumber, Min } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateIngredientDto {
+  @ApiProperty()
   @IsNotEmpty()
   readonly name: string;
 
-  @IsOptional()
-  readonly price: number = 0;
+  @ApiProperty()
+  @IsNumber()
+  @Min(0)
+  readonly pricePerPackaging: number;
 
-  @IsOptional()
-  readonly unit: string;
+  @ApiProperty()
+  @IsNumber()
+  @Min(0)
+  readonly quantityPerPackaging: number;
 
-  @IsOptional()
-  readonly pricePerUnit: number = 0;
+  @ApiProperty()
+  @IsNotEmpty()
+  readonly unitOfMeasurement: string;
 }
