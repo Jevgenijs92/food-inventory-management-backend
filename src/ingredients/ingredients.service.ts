@@ -1,4 +1,5 @@
 import {
+  ConflictException,
   Inject,
   Injectable,
   InternalServerErrorException,
@@ -6,14 +7,16 @@ import {
 } from '@nestjs/common';
 import { CreateIngredientDto } from './dto/create-ingredient.dto';
 import { UpdateIngredientDto } from './dto/update-ingredient.dto';
-import { INGREDIENT_MODEL } from '../common';
-import { Model } from 'mongoose';
+import { INGREDIENT_MODEL, PRODUCT_MODEL } from '../common';
+import { Model, Types } from 'mongoose';
 import { Ingredient } from './entities/ingredient.entity';
+import { Product } from '../products/entities/product.entity';
 
 @Injectable()
 export class IngredientsService {
   constructor(
     @Inject(INGREDIENT_MODEL) private ingredientModel: Model<Ingredient>,
+    @Inject(PRODUCT_MODEL) private productModel: Model<Product>,
   ) {}
 
   async create(createIngredientDto: CreateIngredientDto): Promise<Ingredient> {
@@ -48,6 +51,15 @@ export class IngredientsService {
   }
 
   async remove(id: string) {
+    const product = await this.productModel
+      .findOne({ 'ingredients.ingredient': new Types.ObjectId(id) })
+      .exec();
+    if (product) {
+      throw new ConflictException(
+        'Could not delete ingredient because it is assigned to product',
+      );
+    }
+
     try {
       await this.ingredientModel.deleteOne({ _id: id }).orFail().exec();
     } catch (exception) {
