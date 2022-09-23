@@ -1,4 +1,4 @@
-import { Ingredient } from '../../ingredients/entities/ingredient.entity';
+import { Ingredient } from '../../ingredients';
 import { LeanDocument } from 'mongoose';
 
 export interface Product extends Document {

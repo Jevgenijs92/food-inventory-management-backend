@@ -4,10 +4,9 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
-import { CreateProductDto } from './dto/create-product.dto';
-import { UpdateProductDto } from './dto/update-product.dto';
+import { CreateProductDto, UpdateProductDto } from './dto';
 import { PRODUCT_MODEL } from '../common';
-import { Product } from './entities/product.entity';
+import { Product } from './entities';
 import { LeanDocument, Model } from 'mongoose';
 
 @Injectable()

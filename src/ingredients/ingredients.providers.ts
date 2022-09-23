@@ -1,6 +1,6 @@
 import { DATABASE_CONNECTION, INGREDIENT_MODEL } from '../common';
 import { Connection } from 'mongoose';
-import { IngredientSchema } from './schemas/ingredient.schema';
+import { IngredientSchema } from './schemas';
 
 export const ingredientsProviders = [
   {

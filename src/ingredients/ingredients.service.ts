@@ -5,12 +5,11 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
-import { CreateIngredientDto } from './dto/create-ingredient.dto';
-import { UpdateIngredientDto } from './dto/update-ingredient.dto';
+import { CreateIngredientDto, UpdateIngredientDto } from './dto';
 import { INGREDIENT_MODEL, PRODUCT_MODEL } from '../common';
 import { Model, Types } from 'mongoose';
-import { Ingredient } from './entities/ingredient.entity';
-import { Product } from '../products/entities/product.entity';
+import { Ingredient } from './entities';
+import { Product } from '../products';
 
 @Injectable()
 export class IngredientsService {

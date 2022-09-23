@@ -1,6 +1,6 @@
 import { DATABASE_CONNECTION, PRODUCT_MODEL } from '../common';
 import { Connection } from 'mongoose';
-import { ProductsSchema } from './schemas/products.schema';
+import { ProductsSchema } from './schemas';
 
 export const productsProviders = [
   {

@@ -3,7 +3,7 @@ import { IngredientsService } from './ingredients.service';
 import { IngredientsController } from './ingredients.controller';
 import { ingredientsProviders } from './ingredients.providers';
 import { DatabaseProviderModule } from '../common';
-import { ProductsModule } from '../products/products.module';
+import { ProductsModule } from '../products';
 
 @Module({
   imports: [DatabaseProviderModule, ProductsModule],
