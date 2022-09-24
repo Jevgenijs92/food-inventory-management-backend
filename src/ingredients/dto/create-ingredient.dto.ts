@@ -1,5 +1,11 @@
-import { IsNotEmpty, IsNumber, Min } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsNumber, Min } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+
+export enum UnitsOfMeasurement {
+  KG = 'kg',
+  PCS = 'pcs',
+  L = 'l',
+}
 
 export class CreateIngredientDto {
   @ApiProperty()
@@ -18,5 +24,6 @@ export class CreateIngredientDto {
 
   @ApiProperty()
   @IsNotEmpty()
-  readonly unitOfMeasurement: string;
+  @IsEnum(UnitsOfMeasurement)
+  readonly unitOfMeasurement: UnitsOfMeasurement;
 }
