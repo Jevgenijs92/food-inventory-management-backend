@@ -24,6 +24,10 @@ export class CreateIngredientDto {
 
   @ApiProperty()
   @IsNotEmpty()
-  @IsEnum(UnitsOfMeasurement)
+  @IsEnum(UnitsOfMeasurement, {
+    message: (validationArguments) =>
+      'unitOfMeasurement should be a valid enum value: ' +
+      Object.values(validationArguments.constraints?.[0]).join(', '),
+  })
   readonly unitOfMeasurement: UnitsOfMeasurement;
 }
