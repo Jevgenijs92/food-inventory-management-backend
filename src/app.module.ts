@@ -9,13 +9,7 @@ import { UsersModule } from './users';
 import { APP_GUARD } from '@nestjs/core';
 
 @Module({
-  imports: [
-    AppConfigurationModule,
-    AuthModule,
-    UsersModule,
-    IngredientsModule,
-    ProductsModule,
-  ],
+  imports: [AppConfigurationModule, AuthModule, UsersModule, IngredientsModule, ProductsModule],
   controllers: [AppController],
   providers: [
     AppService,

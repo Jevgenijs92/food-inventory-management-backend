@@ -1,12 +1,4 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Patch,
-  Post,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 import { IngredientsService } from './ingredients.service';
 import { CreateIngredientDto, UpdateIngredientDto } from './dto';
 import { ApiTags } from '@nestjs/swagger';
@@ -32,10 +24,7 @@ export class IngredientsController {
   }
 
   @Patch(':id')
-  async update(
-    @Param('id') id: string,
-    @Body() updateIngredientDto: UpdateIngredientDto,
-  ) {
+  async update(@Param('id') id: string, @Body() updateIngredientDto: UpdateIngredientDto) {
     return this.ingredientsService.update(id, updateIngredientDto);
   }
 

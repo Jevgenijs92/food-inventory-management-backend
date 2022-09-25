@@ -1,7 +1,7 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, HttpCode, Post, Req, UseGuards } from '@nestjs/common';
 import { AuthService, LocalAuthGuard, SkipAuth } from './common/auth';
 import { ApiTags } from '@nestjs/swagger';
-import { UsernamePasswordLoginDto } from './users';
+import { RefreshJwtAuthGuard } from './common/auth/guards/refresh-jwt-auth.guard';
 
 @ApiTags('Auth')
 @Controller()
@@ -11,7 +11,16 @@ export class AppController {
   @SkipAuth()
   @UseGuards(LocalAuthGuard)
   @Post('auth/login')
-  async login(@Body() user: UsernamePasswordLoginDto) {
+  @HttpCode(200)
+  async login(@Body() user: any) {
     return this.authService.login(user);
+  }
+
+  @SkipAuth()
+  @UseGuards(RefreshJwtAuthGuard)
+  @Post('auth/refresh')
+  @HttpCode(200)
+  async refresh(@Req() req: any) {
+    return this.authService.refreshTokens(req.user.userId, req.user.refresh_token);
   }
 }
