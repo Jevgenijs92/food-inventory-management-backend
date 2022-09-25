@@ -15,7 +15,7 @@ export class UsersService {
     return this.userModel.findById(userId).orFail().exec();
   }
 
-  async updateRefreshToken(userId: string, token: string): Promise<User> {
+  async updateRefreshToken(userId: string, token: string | null): Promise<User> {
     return this.userModel.findByIdAndUpdate(userId, { refresh_token: token }).orFail().exec();
   }
 }

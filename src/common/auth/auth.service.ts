@@ -4,7 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { User } from '../../users/entities/user.entity';
 import { AuthConfigurationService } from '../config/auth';
-import { AuthToken } from './dto/auth-token.dto';
+import { AuthToken } from './dto';
 
 @Injectable()
 export class AuthService {
@@ -35,20 +35,20 @@ export class AuthService {
 
   async refreshTokens(userId: string, refreshToken: string) {
     const user = await this.usersService.findById(userId);
-    if (user && user.refresh_token) {
-      const tokenMatches = await bcrypt.compare(refreshToken, user.refresh_token);
-      if (tokenMatches) {
-        const tokens = await this.getTokens(user.id, user.username);
-        await this.updateRefreshToken(user.id, refreshToken);
-        return tokens;
-      }
+    if (user && user.refresh_token && refreshToken === user.refresh_token) {
+      const tokens = await this.getTokens(user.id, user.username);
+      await this.updateRefreshToken(user.id, tokens.refresh_token);
+      return tokens;
     }
     throw new UnauthorizedException();
   }
 
-  async updateRefreshToken(userId: string, refreshToken: string) {
-    const hashedToken = await bcrypt.hash(refreshToken, this.authConfigService.jwtRefreshTokenHashRounds);
-    return this.usersService.updateRefreshToken(userId, hashedToken);
+  async logout(userId: string) {
+    await this.updateRefreshToken(userId, null);
+  }
+
+  async updateRefreshToken(userId: string, refreshToken: string | null) {
+    return this.usersService.updateRefreshToken(userId, refreshToken);
   }
 
   async getTokens(userId: string, username: string): Promise<AuthToken> {
