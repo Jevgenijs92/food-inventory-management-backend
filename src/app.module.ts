@@ -1,18 +1,15 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { AppConfigurationModule } from './common';
 import { IngredientsModule } from './ingredients';
 import { ProductsModule } from './products';
 import { AuthModule, JwtAuthGuard } from './common/auth';
 import { UsersModule } from './users';
 import { APP_GUARD } from '@nestjs/core';
+import { OrdersModule } from './orders/orders.module';
 
 @Module({
-  imports: [AppConfigurationModule, AuthModule, UsersModule, IngredientsModule, ProductsModule],
-  controllers: [AppController],
+  imports: [AppConfigurationModule, AuthModule, UsersModule, IngredientsModule, ProductsModule, OrdersModule],
   providers: [
-    AppService,
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,

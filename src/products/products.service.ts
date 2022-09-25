@@ -40,7 +40,7 @@ export class ProductsService {
       await this.productModel.deleteOne({ _id: id }).orFail().exec();
     } catch (exception) {
       console.log(exception);
-      throw new NotFoundException('Could not find product');
+      throw new NotFoundException('Could not delete product');
     }
   }
 
