@@ -1,9 +1,4 @@
-import {
-  Inject,
-  Injectable,
-  InternalServerErrorException,
-  NotFoundException,
-} from '@nestjs/common';
+import { Inject, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { CreateProductDto, UpdateProductDto } from './dto';
 import { PRODUCT_MODEL } from '../common';
 import { Product } from './entities';
@@ -63,8 +58,7 @@ const convertProduct = (product: LeanDocument<Product>): Product => {
   const ingredients = product.ingredients?.map((entry) => ({
     ingredient: entry.ingredient,
     quantity: entry.quantity,
-    price:
-      Math.round(entry.ingredient.pricePerUnit * entry.quantity * 100) / 100,
+    price: Math.round(entry.ingredient.pricePerUnit * entry.quantity * 100) / 100,
   }));
   return {
     ...product,

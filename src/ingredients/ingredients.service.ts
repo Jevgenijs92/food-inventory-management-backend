@@ -1,10 +1,4 @@
-import {
-  ConflictException,
-  Inject,
-  Injectable,
-  InternalServerErrorException,
-  NotFoundException,
-} from '@nestjs/common';
+import { ConflictException, Inject, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { CreateIngredientDto, UpdateIngredientDto } from './dto';
 import { INGREDIENT_MODEL, PRODUCT_MODEL } from '../common';
 import { Model, Types } from 'mongoose';
@@ -35,10 +29,7 @@ export class IngredientsService {
     }
   }
 
-  async update(
-    id: string,
-    updateIngredientDto: UpdateIngredientDto,
-  ): Promise<Ingredient> {
+  async update(id: string, updateIngredientDto: UpdateIngredientDto): Promise<Ingredient> {
     const updatedIngredient = await this.findOne(id);
     try {
       Object.assign(updatedIngredient, updateIngredientDto);
@@ -50,13 +41,9 @@ export class IngredientsService {
   }
 
   async remove(id: string) {
-    const product = await this.productModel
-      .findOne({ 'ingredients.ingredient': new Types.ObjectId(id) })
-      .exec();
+    const product = await this.productModel.findOne({ 'ingredients.ingredient': new Types.ObjectId(id) }).exec();
     if (product) {
-      throw new ConflictException(
-        'Could not delete ingredient because it is assigned to product',
-      );
+      throw new ConflictException('Could not delete ingredient because it is assigned to product');
     }
 
     try {
