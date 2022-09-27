@@ -28,9 +28,11 @@ export class AuthService {
 
   async login(userDto: any) {
     const user = await this.usersService.findOneByUsername(userDto.username);
-    const tokens = await this.getTokens(user.id, user.username);
-    await this.updateRefreshToken(user.id, tokens.refresh_token);
-    return tokens;
+    if (user) {
+      const tokens = await this.getTokens(user.id, user.username);
+      await this.updateRefreshToken(user.id, tokens.refresh_token);
+      return tokens;
+    }
   }
 
   async refreshTokens(userId: string, refreshToken: string) {
