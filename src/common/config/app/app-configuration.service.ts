@@ -12,10 +12,16 @@ export class AppConfigurationService {
   get env(): string {
     return <string>this.configService.get<string>('app.env');
   }
+
   get url(): string {
     return <string>this.configService.get<string>('app.url');
   }
+
   get port(): number {
     return Number(this.configService.get<number>('app.port'));
+  }
+
+  get allowedOrigin(): string {
+    return <string>this.configService.get<string>('app.allowedOrigin');
   }
 }
