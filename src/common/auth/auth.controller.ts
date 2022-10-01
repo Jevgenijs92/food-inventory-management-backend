@@ -25,8 +25,6 @@ export class AuthController {
     return this.authService.refreshTokens(req.user.userId, req.user.refresh_token);
   }
 
-  @SkipAuth()
-  @UseGuards(RefreshJwtAuthGuard)
   @Post('auth/logout')
   @HttpCode(200)
   async logout(@Req() req: any) {
