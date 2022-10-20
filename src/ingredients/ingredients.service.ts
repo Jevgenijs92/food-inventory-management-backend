@@ -43,7 +43,7 @@ export class IngredientsService {
   async remove(id: string) {
     const product = await this.productModel.findOne({ 'ingredients.ingredient': new Types.ObjectId(id) }).exec();
     if (product) {
-      throw new ConflictException('Could not delete ingredient because it is assigned to product');
+      throw new ConflictException('CONFLICT_INGREDIENT_ASSIGNED_TO_PRODUCT');
     }
 
     try {
