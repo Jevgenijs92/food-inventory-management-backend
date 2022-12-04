@@ -58,15 +58,18 @@ export class OrdersService {
   private async convertToOrder(orderDto: CreateOrderDto | UpdateOrderDto, userId: string) {
     if (orderDto?.products) {
       const productsDto = orderDto.products;
-      const products = await Promise.all(
+      const productsFromDb = await Promise.all(
         productsDto.map((product) => this.productsService.findOne(product.id, userId)),
       );
+      const products = productsDto.map((product) => {
+        return {
+          ...productsFromDb.find((prodFromDb) => product.id === prodFromDb.id.toString()),
+          deliveryQuantity: product.deliveryQuantity,
+        };
+      });
       return {
         deliveryDate: orderDto.deliveryDate,
-        products: products.map((product) => ({
-          ...product,
-          deliveryQuantity: productsDto.find((productDto) => productDto.id === product.id.toString())?.deliveryQuantity,
-        })),
+        products,
       };
     }
     return orderDto;
