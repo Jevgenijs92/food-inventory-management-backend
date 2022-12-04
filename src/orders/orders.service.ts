@@ -35,9 +35,24 @@ export class OrdersService {
 
   async update(id: string, updateOrderDto: UpdateOrderDto, userId: string) {
     const order = await this.findOne(id, userId);
-    const updateOrder = await this.convertToOrder(updateOrderDto, userId);
+
+    const filteredProducts = order
+      .toObject()
+      .products.filter((product: any) =>
+        updateOrderDto.products.find((productDto) => productDto.id === product.id.toString()),
+      );
+
+    filteredProducts.forEach(
+      (product: any) =>
+        (product.deliveryQuantity = updateOrderDto.products.find(
+          (productDto) => productDto.id === product.id.toString(),
+        )?.deliveryQuantity),
+    );
     try {
-      Object.assign(order, updateOrder);
+      Object.assign(order, {
+        deliveryDate: updateOrderDto.deliveryDate,
+        products: filteredProducts,
+      });
       await order?.save();
       return this.findOne(id, userId);
     } catch (exception) {
