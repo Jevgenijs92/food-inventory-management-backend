@@ -24,5 +24,6 @@ const toObjectOptions: ToObjectOptions = {
   transform: (_, value) => {
     value.id = value._id;
     delete value._id;
+    delete value.userId;
   },
 };

@@ -8,45 +8,45 @@ import { LeanDocument, Model } from 'mongoose';
 export class ProductsService {
   constructor(@Inject(PRODUCT_MODEL) private productModel: Model<Product>) {}
 
-  async create(createProductDto: CreateProductDto): Promise<Product | null> {
-    const product = await new this.productModel(createProductDto).save();
+  async create(createProductDto: CreateProductDto, userId: string): Promise<Product | null> {
+    const product = await new this.productModel({ ...createProductDto, userId }).save();
     return convertProduct(product.toObject());
   }
 
-  async findAll(): Promise<Product[]> {
-    const products = await this.productModel.find().exec();
+  async findAll(userId: string): Promise<Product[]> {
+    const products = await this.productModel.find({ userId }).exec();
     return products.map((product) => convertProduct(product.toObject()));
   }
 
-  async findOne(id: string): Promise<Product> {
-    const product = await this.findById(id);
+  async findOne(id: string, userId: string): Promise<Product> {
+    const product = await this.findById(id, userId);
     return convertProduct(product?.toObject());
   }
 
-  async update(id: string, updateProductDto: UpdateProductDto) {
-    const updatedProduct = await this.findById(id);
+  async update(id: string, updateProductDto: UpdateProductDto, userId: string) {
+    const updatedProduct = await this.findById(id, userId);
     try {
       Object.assign(updatedProduct, updateProductDto);
       await updatedProduct.save();
-      return this.findOne(id);
+      return this.findOne(id, userId);
     } catch (exception) {
       console.log(exception);
       throw new InternalServerErrorException('Could not update product');
     }
   }
 
-  async remove(id: string) {
+  async remove(id: string, userId: string) {
     try {
-      await this.productModel.deleteOne({ _id: id }).orFail().exec();
+      await this.productModel.deleteOne({ _id: id, userId }).orFail().exec();
     } catch (exception) {
       console.log(exception);
       throw new NotFoundException('Could not delete product');
     }
   }
 
-  private async findById(id: string) {
+  private async findById(id: string, userId: string) {
     try {
-      return await this.productModel.findById(id).orFail().exec();
+      return await this.productModel.findOne({ _id: id, userId }).orFail().exec();
     } catch (exception) {
       console.log(exception);
       throw new NotFoundException('Could not find product');

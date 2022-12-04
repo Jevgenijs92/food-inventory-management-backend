@@ -1,6 +1,10 @@
 import * as mongoose from 'mongoose';
 
 export const OrderSchema = new mongoose.Schema({
+  userId: {
+    type: String,
+    required: true,
+  },
   deliveryDate: {
     type: Date,
     required: true,
