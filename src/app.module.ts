@@ -6,9 +6,21 @@ import { AuthModule, JwtAuthGuard } from './common/auth';
 import { UsersModule } from './users';
 import { APP_GUARD } from '@nestjs/core';
 import { OrdersModule } from './orders/orders.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
-  imports: [AppConfigurationModule, AuthModule, UsersModule, IngredientsModule, ProductsModule, OrdersModule],
+  imports: [
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, './', 'frontend'),
+    }),
+    AppConfigurationModule,
+    AuthModule,
+    UsersModule,
+    IngredientsModule,
+    ProductsModule,
+    OrdersModule,
+  ],
   providers: [
     {
       provide: APP_GUARD,
