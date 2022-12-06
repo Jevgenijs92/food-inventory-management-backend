@@ -51,6 +51,7 @@ export class OrdersService {
     try {
       Object.assign(order, {
         deliveryDate: updateOrderDto.deliveryDate,
+        documentNumber: updateOrderDto.documentNumber,
         products: filteredProducts,
       });
       await order?.save();
@@ -84,6 +85,7 @@ export class OrdersService {
       });
       return {
         deliveryDate: orderDto.deliveryDate,
+        documentNumber: orderDto.documentNumber,
         products,
       };
     }

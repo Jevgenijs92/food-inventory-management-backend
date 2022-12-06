@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, ValidateNested } from 'class-validator';
+import { IsNotEmpty, IsOptional, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 
 class OrderProduct {
@@ -16,6 +16,10 @@ export class CreateOrderDto {
   @ApiProperty()
   @IsNotEmpty()
   deliveryDate: Date;
+
+  @ApiProperty()
+  @IsOptional()
+  documentNumber: string;
 
   @ApiProperty()
   @IsNotEmpty()

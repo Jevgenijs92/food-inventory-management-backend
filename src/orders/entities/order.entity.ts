@@ -1,5 +1,6 @@
 export interface Order extends Document {
   deliveryDate: Date;
+  documentNumber: string;
   products: {
     name: string;
     ingredients: {

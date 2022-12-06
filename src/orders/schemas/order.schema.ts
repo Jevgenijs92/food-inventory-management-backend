@@ -9,6 +9,10 @@ export const OrderSchema = new mongoose.Schema({
     type: Date,
     required: true,
   },
+  documentNumber: {
+    type: String,
+    required: false,
+  },
   products: [
     {
       name: {
