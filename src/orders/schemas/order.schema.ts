@@ -60,6 +60,12 @@ export const OrderSchema = new mongoose.Schema({
         type: Number,
         required: true,
       },
+      sellPrice: {
+        type: Number,
+        required: true,
+        get: (v: number) => v / 100,
+        set: (v: number) => v * 100,
+      },
     },
   ],
 });

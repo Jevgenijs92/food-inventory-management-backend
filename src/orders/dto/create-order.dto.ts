@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsOptional, ValidateNested } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 
 class OrderProduct {
@@ -10,6 +10,11 @@ class OrderProduct {
   @ApiProperty()
   @IsNotEmpty()
   deliveryQuantity: number;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsNumber()
+  sellPrice: number;
 }
 
 export class CreateOrderDto {

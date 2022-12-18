@@ -15,5 +15,6 @@ export interface Order extends Document {
     }[];
     price: number;
     deliveryQuantity: number;
+    sellPrice: number;
   }[];
 }

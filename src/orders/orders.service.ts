@@ -42,12 +42,13 @@ export class OrdersService {
         updateOrderDto.products.find((productDto) => productDto.id === product.id.toString()),
       );
 
-    filteredProducts.forEach(
-      (product: any) =>
-        (product.deliveryQuantity = updateOrderDto.products.find(
-          (productDto) => productDto.id === product.id.toString(),
-        )?.deliveryQuantity),
-    );
+    filteredProducts.forEach((product: any) => {
+      const productDtoUpdate = updateOrderDto.products.find((productDto) => productDto.id === product.id.toString());
+      if (productDtoUpdate) {
+        product.deliveryQuantity = productDtoUpdate.deliveryQuantity;
+        product.sellPrice = productDtoUpdate.sellPrice;
+      }
+    });
     try {
       Object.assign(order, {
         deliveryDate: updateOrderDto.deliveryDate,
@@ -81,6 +82,7 @@ export class OrdersService {
         return {
           ...productsFromDb.find((prodFromDb) => product.id === prodFromDb.id.toString()),
           deliveryQuantity: product.deliveryQuantity,
+          sellPrice: product.sellPrice,
         };
       });
       return {
