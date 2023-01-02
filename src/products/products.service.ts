@@ -55,11 +55,13 @@ export class ProductsService {
 }
 
 const convertProduct = (product: LeanDocument<Product>): Product => {
-  const ingredients = product.ingredients?.map((entry) => ({
-    ingredient: entry.ingredient,
-    quantity: entry.quantity,
-    price: Math.round(entry.ingredient.pricePerUnit * entry.quantity * 100) / 100,
-  }));
+  const ingredients = product.ingredients
+    ?.map((entry) => ({
+      ingredient: entry.ingredient,
+      quantity: entry.quantity,
+      price: Math.round(entry.ingredient.pricePerUnit * entry.quantity * 100) / 100,
+    }))
+    .sort((a, b) => a.ingredient.name.localeCompare(b.ingredient.name));
   return {
     ...product,
     ingredients,
