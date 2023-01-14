@@ -19,6 +19,10 @@ export class CreateProductDto {
   name: string;
 
   @ApiProperty()
+  @IsNotEmpty()
+  yieldPcs: number;
+
+  @ApiProperty()
   @IsOptional()
   @ValidateNested({ each: true })
   @Type(() => IngredientDto)

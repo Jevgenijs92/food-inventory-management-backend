@@ -10,6 +10,11 @@ export const ProductsSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  yieldPcs: {
+    type: Number,
+    required: false,
+    default: 1,
+  },
   ingredients: [
     {
       ingredient: {
