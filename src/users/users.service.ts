@@ -18,4 +18,8 @@ export class UsersService {
   async updateRefreshToken(userId: string, token: string | null): Promise<User> {
     return this.userModel.findByIdAndUpdate(userId, { refresh_token: token }).orFail().exec();
   }
+
+  async createUser(username: string, password: string) {
+    return this.userModel.create({ username, password });
+  }
 }

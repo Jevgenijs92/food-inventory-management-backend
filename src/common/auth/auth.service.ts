@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { ConflictException, Injectable, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from '../../users';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '../../users/entities/user.entity';
@@ -26,6 +26,21 @@ export class AuthService {
       }
     }
     return null;
+  }
+
+  async register(userDto: any) {
+    const user = await this.usersService.findOneByUsername(userDto.username);
+    if (!user) {
+      const encryptedPassword = await bcrypt.hash(userDto.password, 10);
+      await this.usersService.createUser(userDto.username, encryptedPassword);
+      const validUser = await this.validateUser(userDto.username, userDto.password);
+      if (validUser) {
+        return this.login({ username: userDto.username });
+      } else {
+        throw new InternalServerErrorException('CANNOT_LOGIN');
+      }
+    }
+    throw new ConflictException('USER_EXISTS');
   }
 
   async login(userDto: any) {
