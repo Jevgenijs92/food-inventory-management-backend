@@ -9,5 +9,6 @@ import { ProductsModule } from '../products';
   imports: [DatabaseProviderModule, ProductsModule],
   controllers: [OrdersController],
   providers: [OrdersService, ...ordersProviders],
+  exports: [OrdersService],
 })
 export class OrdersModule {}

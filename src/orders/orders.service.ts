@@ -93,4 +93,8 @@ export class OrdersService {
     }
     return orderDto;
   }
+
+  async changeUserId(userId: string, targetUserId: string) {
+    return this.orderModel.updateMany({ userId }, { userId: targetUserId }).exec();
+  }
 }

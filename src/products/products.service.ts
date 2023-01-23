@@ -52,6 +52,10 @@ export class ProductsService {
       throw new NotFoundException('Could not find product');
     }
   }
+
+  async changeUserId(userId: string, targetUserId: string) {
+    return this.productModel.updateMany({ userId }, { userId: targetUserId }).exec();
+  }
 }
 
 const convertProduct = (product: LeanDocument<Product>): Product => {

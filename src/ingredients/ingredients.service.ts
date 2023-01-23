@@ -58,4 +58,8 @@ export class IngredientsService {
       throw new NotFoundException('Could not find ingredient');
     }
   }
+
+  async changeUserId(userId: string, targetUserId: string) {
+    return this.ingredientModel.updateMany({ userId }, { userId: targetUserId }).exec();
+  }
 }
