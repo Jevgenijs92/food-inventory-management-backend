@@ -8,7 +8,6 @@ import { APP_GUARD } from '@nestjs/core';
 import { OrdersModule } from './orders/orders.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
-import { UsersMigrateDataModule } from './users-migrate-data/users-migrate-data.module';
 
 @Module({
   imports: [
@@ -21,7 +20,7 @@ import { UsersMigrateDataModule } from './users-migrate-data/users-migrate-data.
     IngredientsModule,
     ProductsModule,
     OrdersModule,
-    UsersMigrateDataModule,
+    // UsersMigrateDataModule,
   ],
   providers: [
     {

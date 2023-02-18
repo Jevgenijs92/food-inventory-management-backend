@@ -8,9 +8,10 @@
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",
-    "build:prod": "cd ../frontend && ng build --output-path ../backend/dist/frontend && cd ../backend && nest build",
+    "build:prod": "cd ../frontend && ng build --output-path ../backend/dist/frontend && cd ../backend && nest build && cp package.json ../backend/dist && cd ../backend/dist && zip -r build.zip *",
+    "deploy":"yarn build:prod && eb deploy fim-env --staged",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "start": "nest start",
+    "start": "node main.js",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
