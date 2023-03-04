@@ -1,8 +1,11 @@
+branch-defaults:
+  develop:
+    environment: fim-env
+deploy:
+  artifact: dist/build.zip
 ebbranch-defaults:
   develop:
     environment: Fim-env
-deploy:
-  artifact: dist/build.zip
 environment-defaults:
   Fim-env:
     branch: null
